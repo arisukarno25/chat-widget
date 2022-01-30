@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;1,100;1,200;1,300;1,400&display=swap"
+        rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="../style/style.css">
+
+    <title>login admin</title>
+</head>
+
+<body style="background-color: #3A5168;">
+
+    <div class="container-fluid justify-content-center">
+        <div class="row justify-content-center">
+            <div class="col-sm-3 " style="padding-top:10%;">
+                <div class="card h-100 shadow p-4 rounded border-0">
+                    <h3 style="color:#30475E;text-align: center;">Admin Login</h3>
+                    <div class="mb-4 ">
+                        <input type="text" class="form-control rounded-pill" name="Username" id="username"
+                            placeholder="Username" required>
+                    </div>
+                    <div class="mb-4">
+                        <input type="password" name="Pass" class="form-control rounded-pill" id="password"
+                            placeholder="Password" required>
+                    </div>
+                    <a type="submit" name="Login" value="Login" class="btn btn-danger rounded-pill form-control"
+                        id="btn_login">Submit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+        crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js" integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/" crossorigin="anonymous"></script>
+    -->
+
+    <script src='http://code.jquery.com/jquery-1.11.3.min.js'></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        const username = document.getElementById('username');
+        const password = document.getElementById('password');
+        const btnLogin = document.getElementById('btn_login');
+
+        btnLogin.addEventListener('click', () => {
+            socket.emit('login_admin', username.value, password.value);
+        });
+
+        socket.on('login_result', (msg) => {
+            if (msg == '1') {
+                location.replace('admin');
+            } else {
+                console.log("Wrong Password");
+            }
+        });
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Chat Widget</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <link rel="stylesheet" type="text/css" href="../style/styleChatBox.css" />
+
+  <body>
+    <div class="fabs">
+      <div class="chat">
+        <!-- header -->
+        <div class="chat_header">
+          <div class="chat_option">
+            <div class="header_img">
+              <img src="../assets/person.png" />
+            </div>
+            <span id="chat_head">Customer Services</span> <br />
+            <span class="online">(Online)</span>
+            <span id="chat_fullscreen_loader" class="chat_fullscreen_loader"
+              ><i class="fullscreen zmdi zmdi-window-maximize"></i
+            ></span>
+          </div>
+        </div>
+
+        <!-- login -->
+        <div id="user-login" class="chat_body chat_login">
+          <p style="color: white">Register</p>
+          <div class="field-form-register">
+            <input type="text" placeholder="Nama" id="username" />
+            <input type="text" placeholder="Email" id="email" />
+          </div>
+          <div class="login">
+            <a id="submit-login"><input type="submit" value="Submit" /></a>
+          </div>
+        </div>
+
+        <!-- room chat  -->
+        <div id="chat_converse" class="chat_conversion chat_converse"></div>
+
+        <!-- send message -->
+        <div class="fab_field">
+          <a id="fab_send" class="fab"
+            ><img src="../assets/send.svg" width="15px"
+          /></a>
+          <textarea
+            id="chatSend"
+            name="chat_message"
+            placeholder="Send a message"
+            class="chat_field chat_message"
+          ></textarea>
+        </div>
+      </div>
+      <a id="prime" class="fab"
+        ><img src="../assets/bubble.png" width="56px "
+      /></a>
+    </div>
+
+    <!-- source script and css -->
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="../style/jsChatBox.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      // INSIALISASI SOCKET
+      const socket = io();
+
+      const username = document.getElementById("username");
+      const email = document.getElementById("email");
+      const chat = document.getElementById("chatSend");
+
+      const btnLogin = document.getElementById("submit-login");
+      const btnSend = document.getElementById("fab_send");
+
+      // LOGIN USER
+      btnLogin.addEventListener("click", () => {
+        socket.emit("create_user", username.value, email.value);
+      });
+
+      // MENGIRIM PESAN
+      btnSend.addEventListener("click", () => {
+        socket.emit("sendchat", username.value, chat.value);
+      });
+
+      // MENGUPDATE CHAT
+      socket.on("updatechat", (username, msg) => {
+        if (username == "admin") {
+          $("#chat_converse").append(
+            '<span class="chat_msg_item chat_msg_item_admin"> <div class="chat_avatar"> <img src="../assets/person.png" /> </div>' +
+              msg +
+              "</span>"
+          );
+        } else {
+          $("#chat_converse").append(
+            '<span class="chat_msg_item chat_msg_item_user">' + msg + "</span>"
+          );
+        }
+        chat.value = "";
+      });
+    </script>
+  </body>
+</html>
